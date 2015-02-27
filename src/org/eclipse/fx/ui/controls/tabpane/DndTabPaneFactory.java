@@ -168,7 +168,7 @@ public final class DndTabPaneFactory {
 	 * @param setup
 	 *            the setup
 	 */
-	static void setup(FeedbackType type, Pane layoutNode, DragSetup setup) {
+	public static void setup(FeedbackType type, Pane layoutNode, DragSetup setup) {
 		setup.setStartFunction((t) -> Boolean.valueOf(!t.isDisabled() && ((DndTabPane) t.getTabPane()).isDraggingEnabled()));
 		setup.setFeedbackConsumer((d) -> handleFeedback(type, layoutNode, d));
 		setup.setDropConsumer(DndTabPaneFactory::handleDropped);
