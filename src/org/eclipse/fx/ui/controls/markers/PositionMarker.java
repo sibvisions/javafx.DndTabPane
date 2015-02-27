@@ -14,8 +14,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import javafx.beans.property.ObjectProperty;
 import javafx.css.CssMetaData;
 import javafx.css.SimpleStyleableObjectProperty;
@@ -36,7 +34,6 @@ import com.sun.javafx.css.converters.PaintConverter;
 /**
  * Marker which can be used to show an insert position {@link TabPane}
  */
-@SuppressWarnings("restriction")
 public final class PositionMarker extends Group {
 	/**
 	 * Create a new marker
@@ -84,9 +81,7 @@ public final class PositionMarker extends Group {
 		setEffect(new DropShadow(3, Color.BLACK));
 	}
 
-	@SuppressWarnings("null")
-	@NonNull
-	private final ObjectProperty<@NonNull Paint> fill = new SimpleStyleableObjectProperty<>(FILL, this, "fill", Color.rgb(0, 139, 255)); //$NON-NLS-1$
+	private final ObjectProperty<Paint> fill = new SimpleStyleableObjectProperty<>(FILL, this, "fill", Color.rgb(0, 139, 255)); //$NON-NLS-1$
 
 	/**
 	 * The property
@@ -97,7 +92,7 @@ public final class PositionMarker extends Group {
 	 *
 	 * @return the fill property of the marker
 	 */
-	public @NonNull ObjectProperty<@NonNull Paint> fillProperty() {
+	public ObjectProperty<Paint> fillProperty() {
 		return this.fill;
 	}
 
@@ -111,7 +106,7 @@ public final class PositionMarker extends Group {
 	 * @param fill
 	 *            the new fill
 	 */
-	public void setFill(@NonNull Paint fill) {
+	public void setFill(Paint fill) {
 		fillProperty().set(fill);
 	}
 
@@ -124,12 +119,11 @@ public final class PositionMarker extends Group {
 	 *
 	 * @return the current fill
 	 */
-	public @NonNull Paint getFill() {
+	public Paint getFill() {
 		return fillProperty().get();
 	}
 
-	@SuppressWarnings("null")
-	private static final CssMetaData<PositionMarker, @NonNull Paint> FILL = new CssMetaData<PositionMarker, @NonNull Paint>("-fx-fill", PaintConverter.getInstance(), Color.rgb(0, 139, 255)) { //$NON-NLS-1$
+	private static final CssMetaData<PositionMarker, Paint> FILL = new CssMetaData<PositionMarker, Paint>("-fx-fill", PaintConverter.getInstance(), Color.rgb(0, 139, 255)) { //$NON-NLS-1$
 
 		@Override
 		public boolean isSettable(PositionMarker node) {
@@ -138,8 +132,8 @@ public final class PositionMarker extends Group {
 
 		@SuppressWarnings("unchecked")
 		@Override
-		public StyleableProperty<@NonNull Paint> getStyleableProperty(PositionMarker node) {
-			return (StyleableProperty<@NonNull Paint>) node.fillProperty();
+		public StyleableProperty<Paint> getStyleableProperty(PositionMarker node) {
+			return (StyleableProperty<Paint>) node.fillProperty();
 		}
 
 	};

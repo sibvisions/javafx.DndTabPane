@@ -25,8 +25,6 @@ import javafx.scene.layout.StackPane;
 import org.eclipse.fx.ui.controls.markers.PositionMarker;
 import org.eclipse.fx.ui.controls.markers.TabOutlineMarker;
 import org.eclipse.fx.ui.controls.tabpane.skin.DnDTabPaneSkin;
-import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 
 /**
  * Factory to create a tab pane who support DnD
@@ -166,7 +164,6 @@ public final class DndTabPaneFactory {
 	 * @param setup
 	 *            the setup
 	 */
-	@SuppressWarnings("null")
 	static void setup(FeedbackType type, Pane layoutNode, DragSetup setup) {
 		setup.setStartFunction((t) -> Boolean.TRUE);
 		setup.setFeedbackConsumer((d) -> handleFeedback(type, layoutNode, d));
@@ -262,7 +259,6 @@ public final class DndTabPaneFactory {
 		};
 	}
 
-	@SuppressWarnings("null")
 	private static MarkerFeedback handleOutline(Pane layoutNode, FeedbackData data) {
 		TabOutlineMarker marker = null;
 
@@ -342,7 +338,7 @@ public final class DndTabPaneFactory {
 		/**
 		 * The tab dragged
 		 */
-		public final @NonNull Tab draggedTab;
+		public final Tab draggedTab;
 		/**
 		 * The reference tab
 		 */
@@ -354,7 +350,7 @@ public final class DndTabPaneFactory {
 		/**
 		 * The drop type
 		 */
-		public final @NonNull DropType dropType;
+		public final DropType dropType;
 
 		/**
 		 * Create a feedback data
@@ -368,7 +364,7 @@ public final class DndTabPaneFactory {
 		 * @param dropType
 		 *            the drop type
 		 */
-		public FeedbackData(@NonNull Tab draggedTab, Tab targetTab, Bounds bounds, @NonNull DropType dropType) {
+		public FeedbackData(Tab draggedTab, Tab targetTab, Bounds bounds, DropType dropType) {
 			this.draggedTab = draggedTab;
 			this.targetTab = targetTab;
 			this.bounds = bounds;
@@ -421,15 +417,15 @@ public final class DndTabPaneFactory {
 		/**
 		 * The dragged tab
 		 */
-		public final @NonNull Tab draggedTab;
+		public final Tab draggedTab;
 		/**
 		 * The reference tab
 		 */
-		public final @NonNull Tab targetTab;
+		public final Tab targetTab;
 		/**
 		 * The drop type
 		 */
-		public final @NonNull DropType dropType;
+		public final DropType dropType;
 
 		/**
 		 * Create drop data
@@ -441,7 +437,7 @@ public final class DndTabPaneFactory {
 		 * @param dropType
 		 *            the drop type
 		 */
-		public DroppedData(@NonNull Tab draggedTab, @NonNull Tab targetTab, @NonNull DropType dropType) {
+		public DroppedData(Tab draggedTab, Tab targetTab, DropType dropType) {
 			this.draggedTab = draggedTab;
 			this.targetTab = targetTab;
 			this.dropType = dropType;
@@ -458,7 +454,7 @@ public final class DndTabPaneFactory {
 		 * @param startFunction
 		 *            the function
 		 */
-		public void setStartFunction(@Nullable Function<@NonNull Tab, @NonNull Boolean> startFunction);
+		public void setStartFunction(Function<Tab, Boolean> startFunction);
 
 		/**
 		 * Consumer called to handle the finishing of the drag process
@@ -466,7 +462,7 @@ public final class DndTabPaneFactory {
 		 * @param dragFinishedConsumer
 		 *            the consumer
 		 */
-		public void setDragFinishedConsumer(@Nullable Consumer<@NonNull Tab> dragFinishedConsumer);
+		public void setDragFinishedConsumer(Consumer<Tab> dragFinishedConsumer);
 
 		/**
 		 * Consumer called to present drag feedback
@@ -474,7 +470,7 @@ public final class DndTabPaneFactory {
 		 * @param feedbackConsumer
 		 *            the consumer to call
 		 */
-		public void setFeedbackConsumer(@Nullable Consumer<@NonNull FeedbackData> feedbackConsumer);
+		public void setFeedbackConsumer(Consumer<FeedbackData> feedbackConsumer);
 
 		/**
 		 * Consumer called when the drop has to be handled
@@ -482,7 +478,7 @@ public final class DndTabPaneFactory {
 		 * @param dropConsumer
 		 *            the consumer
 		 */
-		public void setDropConsumer(@Nullable Consumer<@NonNull DroppedData> dropConsumer);
+		public void setDropConsumer(Consumer<DroppedData> dropConsumer);
 
 		/**
 		 * Function to translate the tab content into clipboard content
@@ -490,6 +486,6 @@ public final class DndTabPaneFactory {
 		 * @param clipboardDataFunction
 		 *            the function
 		 */
-		public void setClipboardDataFunction(@Nullable Function<@NonNull Tab, @NonNull String> clipboardDataFunction);
+		public void setClipboardDataFunction(Function<Tab, String> clipboardDataFunction);
 	}
 }

@@ -27,18 +27,13 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Polyline;
 import javafx.scene.shape.StrokeType;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import com.sun.javafx.css.converters.PaintConverter;
 
 /**
  * Marks a Tab-Position
  */
-@SuppressWarnings("restriction")
 public final class TabOutlineMarker extends Group {
-	@NonNull
 	private Bounds containerBounds;
-	@NonNull
 	private Bounds referenceBounds;
 	private boolean before;
 
@@ -53,7 +48,7 @@ public final class TabOutlineMarker extends Group {
 	 *            <code>true</code> to mark the insert point before reference
 	 *            bounds
 	 */
-	public TabOutlineMarker(@NonNull Bounds containerBounds, @NonNull Bounds referenceBounds, boolean before) {
+	public TabOutlineMarker(Bounds containerBounds, Bounds referenceBounds, boolean before) {
 		this.containerBounds = containerBounds;
 		this.referenceBounds = referenceBounds;
 		updateBounds(containerBounds, referenceBounds, before);
@@ -71,7 +66,7 @@ public final class TabOutlineMarker extends Group {
 	 *            <code>true</code> to mark the insert point before reference
 	 *            bounds
 	 */
-	public void updateBounds(@NonNull Bounds containerBounds, @NonNull Bounds referenceBounds, boolean before) {
+	public void updateBounds(Bounds containerBounds, Bounds referenceBounds, boolean before) {
 		if (containerBounds.equals(this.containerBounds) && referenceBounds.equals(this.referenceBounds) && before == this.before) {
 			return;
 		}
@@ -132,9 +127,7 @@ public final class TabOutlineMarker extends Group {
 		getChildren().setAll(pl);
 	}
 
-	@SuppressWarnings("null")
-	@NonNull
-	private final ObjectProperty<@NonNull Paint> fill = new SimpleStyleableObjectProperty<>(FILL, this, "fill", Color.ORANGE); //$NON-NLS-1$
+	private final ObjectProperty<Paint> fill = new SimpleStyleableObjectProperty<>(FILL, this, "fill", Color.ORANGE); //$NON-NLS-1$
 
 	/**
 	 * The fill property
@@ -146,7 +139,7 @@ public final class TabOutlineMarker extends Group {
 	 *
 	 * @return the property
 	 */
-	public @NonNull ObjectProperty<@NonNull Paint> fillProperty() {
+	public ObjectProperty<Paint> fillProperty() {
 		return this.fill;
 	}
 
@@ -160,7 +153,7 @@ public final class TabOutlineMarker extends Group {
 	 * @param fill
 	 *            the fill
 	 */
-	public void setFill(@NonNull Paint fill) {
+	public void setFill(Paint fill) {
 		fillProperty().set(fill);
 	}
 
@@ -173,12 +166,11 @@ public final class TabOutlineMarker extends Group {
 	 *
 	 * @return the current fill
 	 */
-	public @NonNull Paint getFill() {
+	public Paint getFill() {
 		return fillProperty().get();
 	}
 
-	@SuppressWarnings("null")
-	private static final CssMetaData<TabOutlineMarker, @NonNull Paint> FILL = new CssMetaData<TabOutlineMarker, @NonNull Paint>("-fx-fill", PaintConverter.getInstance(), Color.ORANGE) { //$NON-NLS-1$
+	private static final CssMetaData<TabOutlineMarker, Paint> FILL = new CssMetaData<TabOutlineMarker, Paint>("-fx-fill", PaintConverter.getInstance(), Color.ORANGE) { //$NON-NLS-1$
 
 		@Override
 		public boolean isSettable(TabOutlineMarker node) {
@@ -187,8 +179,8 @@ public final class TabOutlineMarker extends Group {
 
 		@SuppressWarnings("unchecked")
 		@Override
-		public StyleableProperty<@NonNull Paint> getStyleableProperty(TabOutlineMarker node) {
-			return (StyleableProperty<@NonNull Paint>) node.fillProperty();
+		public StyleableProperty<Paint> getStyleableProperty(TabOutlineMarker node) {
+			return (StyleableProperty<Paint>) node.fillProperty();
 		}
 
 	};
@@ -196,7 +188,6 @@ public final class TabOutlineMarker extends Group {
 	private static final List<CssMetaData<? extends Styleable, ?>> STYLEABLES;
 
 	static {
-		@SuppressWarnings("static-access")
 		final List<CssMetaData<? extends Styleable, ?>> styleables = new ArrayList<CssMetaData<? extends Styleable, ?>>(Group.getClassCssMetaData());
 		styleables.add(FILL);
 		STYLEABLES = Collections.unmodifiableList(styleables);

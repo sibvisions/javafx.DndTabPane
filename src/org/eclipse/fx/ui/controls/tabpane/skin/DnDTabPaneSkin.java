@@ -39,8 +39,6 @@ import org.eclipse.fx.ui.controls.tabpane.DndTabPaneFactory.DragSetup;
 import org.eclipse.fx.ui.controls.tabpane.DndTabPaneFactory.DropType;
 import org.eclipse.fx.ui.controls.tabpane.DndTabPaneFactory.DroppedData;
 import org.eclipse.fx.ui.controls.tabpane.DndTabPaneFactory.FeedbackData;
-import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 
 import com.sun.javafx.scene.control.skin.TabPaneSkin;
 
@@ -360,63 +358,63 @@ public class DnDTabPaneSkin extends TabPaneSkin implements DragSetup {
 		efx_dragFinished(tab);
 	}
 
-	private @Nullable Function<@NonNull Tab, @NonNull Boolean> startFunction;
-	private @Nullable Consumer<@NonNull Tab> dragFinishedConsumer;
-	private @Nullable Consumer<@NonNull FeedbackData> feedbackConsumer;
-	private @Nullable Consumer<@NonNull DroppedData> dropConsumer;
-	private @Nullable Function<@NonNull Tab, @NonNull String> clipboardDataFunction;
+	private Function<Tab, Boolean> startFunction;
+	private Consumer<Tab> dragFinishedConsumer;
+	private Consumer<FeedbackData> feedbackConsumer;
+	private Consumer<DroppedData> dropConsumer;
+	private Function<Tab, String> clipboardDataFunction;
 
 	@Override
-	public void setClipboardDataFunction(@Nullable Function<@NonNull Tab, @NonNull String> clipboardDataFunction) {
+	public void setClipboardDataFunction(Function<Tab, String> clipboardDataFunction) {
 		this.clipboardDataFunction = clipboardDataFunction;
 	}
 
 	@Override
-	public void setStartFunction(@Nullable Function<@NonNull Tab, @NonNull Boolean> startFunction) {
+	public void setStartFunction(Function<Tab, Boolean> startFunction) {
 		this.startFunction = startFunction;
 	}
 
 	@Override
-	public void setDragFinishedConsumer(@Nullable Consumer<@NonNull Tab> dragFinishedConsumer) {
+	public void setDragFinishedConsumer(Consumer<Tab> dragFinishedConsumer) {
 		this.dragFinishedConsumer = dragFinishedConsumer;
 	}
 
 	@Override
-	public void setFeedbackConsumer(@Nullable Consumer<@NonNull FeedbackData> feedbackConsumer) {
+	public void setFeedbackConsumer(Consumer<FeedbackData> feedbackConsumer) {
 		this.feedbackConsumer = feedbackConsumer;
 	}
 
 	@Override
-	public void setDropConsumer(@Nullable Consumer<@NonNull DroppedData> dropConsumer) {
+	public void setDropConsumer(Consumer<DroppedData> dropConsumer) {
 		this.dropConsumer = dropConsumer;
 	}
 
-	private boolean efx_canStartDrag(@NonNull Tab tab) {
+	private boolean efx_canStartDrag(Tab tab) {
 		if (this.startFunction != null) {
 			return this.startFunction.apply(tab).booleanValue();
 		}
 		return true;
 	}
 
-	private void efx_dragFeedback(@NonNull Tab draggedTab, Tab targetTab, Bounds bounds, @NonNull DropType dropType) {
+	private void efx_dragFeedback(Tab draggedTab, Tab targetTab, Bounds bounds, DropType dropType) {
 		if (this.feedbackConsumer != null) {
 			this.feedbackConsumer.accept(new FeedbackData(draggedTab, targetTab, bounds, dropType));
 		}
 	}
 
-	private void efx_dropped(@NonNull Tab draggedTab, @NonNull Tab targetTab, @NonNull DropType dropType) {
+	private void efx_dropped(Tab draggedTab, Tab targetTab, DropType dropType) {
 		if (this.dropConsumer != null) {
 			this.dropConsumer.accept(new DroppedData(draggedTab, targetTab, dropType));
 		}
 	}
 
-	private void efx_dragFinished(@NonNull Tab tab) {
+	private void efx_dragFinished(Tab tab) {
 		if (this.dragFinishedConsumer != null) {
 			this.dragFinishedConsumer.accept(tab);
 		}
 	}
 
-	private String efx_getClipboardContent(@NonNull Tab t) {
+	private String efx_getClipboardContent(Tab t) {
 		if (this.clipboardDataFunction != null) {
 			return this.clipboardDataFunction.apply(t);
 		}
