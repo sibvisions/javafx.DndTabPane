@@ -1,0 +1,27 @@
+<project name="DnDTabPane" default="build" basedir=".">
+	<description>
+		A TabPane for JavaFX that supports reordering the tabs with Drag'N'Drop.
+	</description>
+	
+	<property name="src" value="src" />
+	<property name="classes" value="classes" />
+	<property name="build" value="build" />
+	
+	<target name="clean" description="Cleans the working directory from everything build related">
+		<delete dir="${clases}" />
+		<delete dir="${build}" />
+	</target>
+	
+	<target name="init" description="Sets up the current working directory.">
+		<mkdir dir="${classes}" />
+		<mkdir dir="${build}" />
+	</target>
+	
+	<target name="compile" depends="init" description="Compiles all source files.">
+		<javac srcdir="${src}" destdir="${classes}" includeantruntime="false" source="1.8" />
+	</target>
+	
+	<target name="build" depends="compile" description="Creates the jar.">
+		<jar jarfile="${build}/dndtabpane.jar" basedir="${classes}" />
+	</target>
+</project>
