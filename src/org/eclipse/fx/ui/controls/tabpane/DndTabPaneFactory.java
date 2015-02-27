@@ -100,7 +100,11 @@ public final class DndTabPaneFactory {
 				return skin;
 			}
 		};
-		setup.accept(tabPane);
+		
+		if (setup != null) {
+			setup.accept(tabPane);
+		}
+		
 		pane.getChildren().add(tabPane);
 		return pane;
 	}
