@@ -70,7 +70,7 @@ public final class DndTabPaneFactory {
 	 * @return the tab pane
 	 */
 	public static TabPane createDndTabPane(Consumer<DragSetup> setup) {
-		return new TabPane() {
+		return new DndTabPane() {
 			@Override
 			protected javafx.scene.control.Skin<?> createDefaultSkin() {
 				DnDTabPaneSkin skin = new DnDTabPaneSkin(this);
@@ -91,7 +91,7 @@ public final class DndTabPaneFactory {
 	 */
 	public static Pane createDefaultDnDPane(FeedbackType feedbackType, Consumer<TabPane> setup) {
 		StackPane pane = new StackPane();
-		TabPane tabPane = new TabPane() {
+		TabPane tabPane = new DndTabPane() {
 			@Override
 			protected javafx.scene.control.Skin<?> createDefaultSkin() {
 				DnDTabPaneSkin skin = new DnDTabPaneSkin(this);
@@ -169,7 +169,7 @@ public final class DndTabPaneFactory {
 	 *            the setup
 	 */
 	static void setup(FeedbackType type, Pane layoutNode, DragSetup setup) {
-		setup.setStartFunction((t) -> Boolean.valueOf(!t.isDisabled()));
+		setup.setStartFunction((t) -> Boolean.valueOf(!t.isDisabled() && ((DndTabPane) t.getTabPane()).isDraggingEnabled()));
 		setup.setFeedbackConsumer((d) -> handleFeedback(type, layoutNode, d));
 		setup.setDropConsumer(DndTabPaneFactory::handleDropped);
 		setup.setDragFinishedConsumer(DndTabPaneFactory::handleFinished);
