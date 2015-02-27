@@ -45,7 +45,6 @@ import com.sun.javafx.scene.control.skin.TabPaneSkin;
 /**
  * Skin for TabPane which support DnD
  */
-@SuppressWarnings("restriction")
 public class DnDTabPaneSkin extends TabPaneSkin implements DragSetup {
 	private static Tab DRAGGED_TAB;
 	/**
