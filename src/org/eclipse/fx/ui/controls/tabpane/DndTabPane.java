@@ -11,7 +11,10 @@
 package org.eclipse.fx.ui.controls.tabpane;
 
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.event.EventHandler;
 import javafx.scene.control.TabPane;
 
 /**
@@ -19,6 +22,7 @@ import javafx.scene.control.TabPane;
  */
 public class DndTabPane extends TabPane {
 	private BooleanProperty draggingEnabled = new SimpleBooleanProperty(true);
+	private ObjectProperty<EventHandler<TabDraggedEvent>> onTabDragged = new SimpleObjectProperty<>(null);
 	
 	/**
 	 * Creates a new instance of {@link DndTabPane}.
@@ -37,6 +41,15 @@ public class DndTabPane extends TabPane {
 	}
 	
 	/**
+	 * Gets the event handler for the tab dragged event.
+	 * 
+	 * @return the event handler.
+	 */
+	public EventHandler<TabDraggedEvent> getOnTabDragged() {
+		return onTabDragged.get();
+	}
+	
+	/**
 	 * Gets if the dragging of tabs is enabled.
 	 * 
 	 * @return {@code true} if the dragging of tabs is enabled.
@@ -46,11 +59,29 @@ public class DndTabPane extends TabPane {
 	}
 	
 	/**
+	 * Gets the property of the tab dragged event.
+	 * 
+	 * @return the property for the tab dragged event.
+	 */
+	public ObjectProperty<EventHandler<TabDraggedEvent>> onTabDragged() {
+		return onTabDragged;
+	}
+	
+	/**
 	 * Sets if the dragging of tabs is enabled.
 	 * 
 	 * @param enabled {@code true} if the dragging of tabs should be enabled.
 	 */
 	public void setDraggingEnabled(boolean enabled) {
 		draggingEnabled.set(enabled);
+	}
+	
+	/**
+	 * Sets the event handler for the tab dragged event.
+	 * 
+	 * @param value the event handle for the on tab dragged event.
+	 */
+	public void setOnTabDragged(EventHandler<TabDraggedEvent> value) {
+		onTabDragged.setValue(value);
 	}
 }

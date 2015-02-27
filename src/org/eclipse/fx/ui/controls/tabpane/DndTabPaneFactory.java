@@ -13,6 +13,7 @@ package org.eclipse.fx.ui.controls.tabpane;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import javafx.event.EventHandler;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
@@ -174,9 +175,18 @@ public final class DndTabPaneFactory {
 		setup.setDropConsumer(DndTabPaneFactory::handleDropped);
 		setup.setDragFinishedConsumer(DndTabPaneFactory::handleFinished);
 	}
-
+	
+	private static void fireTabDraggedEvent(DndTabPane tabPane, Tab draggedTab, int fromIndex, int toIndex) {
+		EventHandler<TabDraggedEvent> eventHandler = tabPane.getOnTabDragged();
+		
+		if (eventHandler != null) {
+			eventHandler.handle(new TabDraggedEvent(draggedTab, fromIndex, toIndex));
+		}
+	}
+	
 	private static void handleDropped(DroppedData data) {
 		TabPane targetPane = data.targetTab.getTabPane();
+		int oldIndex = data.draggedTab.getTabPane().getTabs().indexOf(data.draggedTab);
 		data.draggedTab.getTabPane().getTabs().remove(data.draggedTab);
 		int idx = targetPane.getTabs().indexOf(data.targetTab);
 		if (data.dropType == DropType.AFTER) {
@@ -188,6 +198,9 @@ public final class DndTabPaneFactory {
 		} else {
 			targetPane.getTabs().add(idx, data.draggedTab);
 		}
+		
+		fireTabDraggedEvent((DndTabPane) targetPane, data.draggedTab, oldIndex, targetPane.getTabs().indexOf(data.draggedTab));
+				
 		data.draggedTab.getTabPane().getSelectionModel().select(data.draggedTab);
 	}
 
