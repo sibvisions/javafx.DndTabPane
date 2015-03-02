@@ -3,8 +3,8 @@
 This repository holds a Drag'n'Drop extended TabPane which is an extension
 of the default JavaFX TabPane.
 
-This TabPane was written by Tom Schindl at Best Solutions and is part of
-the "org.eclipse.fx.ui.controls" bundle which itself is part of
+This TabPane was written by Tom Schindl at [BestSolution](http://bestsolution.at)
+and is part of the "org.eclipse.fx.ui.controls" bundle which itself is part of
 the [SWT on JavaFX](https://wiki.eclipse.org/Efxclipse/SWTonFX) efforts.
 
 It has been extracted for easier reusability in the [JVx JavaFX](https://sourceforge.net/projects/jvxfx/)
