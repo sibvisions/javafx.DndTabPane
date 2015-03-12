@@ -15,6 +15,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.EventHandler;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 
 /**
@@ -38,6 +39,17 @@ public class DndTabPane extends TabPane {
 	 */
 	public BooleanProperty draggingEnabledProperty() {
 		return draggingEnabled;
+	}
+	
+	
+	public void fireTabDragged(Tab draggedTab, int fromIndex, int toIndex) {
+		TabDraggedEvent event = new TabDraggedEvent(draggedTab, fromIndex, toIndex);
+		
+		if (onTabDragged.get() != null) {
+			onTabDragged.get().handle(event);
+		}
+		
+		fireEvent(event);
 	}
 	
 	/**

@@ -177,11 +177,7 @@ public final class DndTabPaneFactory {
 	}
 	
 	private static void fireTabDraggedEvent(DndTabPane tabPane, Tab draggedTab, int fromIndex, int toIndex) {
-		EventHandler<TabDraggedEvent> eventHandler = tabPane.getOnTabDragged();
-		
-		if (eventHandler != null) {
-			eventHandler.handle(new TabDraggedEvent(draggedTab, fromIndex, toIndex));
-		}
+		tabPane.fireTabDragged(draggedTab, fromIndex, toIndex);
 	}
 	
 	private static void handleDropped(DroppedData data) {

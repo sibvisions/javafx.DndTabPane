@@ -11,15 +11,17 @@
 package org.eclipse.fx.ui.controls.tabpane;
 
 import javafx.event.Event;
+import javafx.event.EventType;
 import javafx.scene.control.Tab;
 
 /**
  * The event that occurres if a tab is dragged.
  */
 public class TabDraggedEvent extends Event {
-	private Tab draggedTab;
 	private int fromIndex;
 	private int toIndex;
+	
+	public static final EventType<TabDraggedEvent> TAB_DRAGGED = new EventType<>(Event.ANY, "TAB_DRAGGED");
 	
 	/**
 	 * Creates a new instance of {@link TabDraggedEvent}.
@@ -29,9 +31,9 @@ public class TabDraggedEvent extends Event {
 	 * @param toIndex the to index.
 	 */
 	public TabDraggedEvent(Tab draggedTab, int fromIndex, int toIndex) {
-		super(null);
+		super(TAB_DRAGGED);
 		
-		this.draggedTab = draggedTab;
+		this.source = draggedTab;
 		this.fromIndex = fromIndex;
 		this.toIndex = toIndex;
 	}
@@ -42,7 +44,7 @@ public class TabDraggedEvent extends Event {
 	 * @return the dragged tab.
 	 */
 	public Tab getDraggedTab() {
-		return draggedTab;
+		return (Tab) source;
 	}
 	
 	/**
