@@ -41,7 +41,13 @@ public class DndTabPane extends TabPane {
 		return draggingEnabled;
 	}
 	
-	
+	/**
+	 * Fires the {@link TabDraggedEvent}.
+	 * 
+	 * @param draggedTab the {@link Tab} that was dragged.
+	 * @param fromIndex the index from which the {@link Tab} was dragged.
+	 * @param toIndex the index to which the {@link Tab} was dragged.
+	 */
 	public void fireTabDragged(Tab draggedTab, int fromIndex, int toIndex) {
 		TabDraggedEvent event = new TabDraggedEvent(draggedTab, fromIndex, toIndex);
 		
