@@ -13,7 +13,6 @@ package org.eclipse.fx.ui.controls.tabpane;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import javafx.event.EventHandler;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
@@ -70,7 +69,7 @@ public final class DndTabPaneFactory {
 	 *            the setup instance for the pane
 	 * @return the tab pane
 	 */
-	public static TabPane createDndTabPane(Consumer<DragSetup> setup) {
+	public static DndTabPane createDndTabPane(Consumer<DragSetup> setup) {
 		return new DndTabPane() {
 			@Override
 			protected javafx.scene.control.Skin<?> createDefaultSkin() {
@@ -92,7 +91,7 @@ public final class DndTabPaneFactory {
 	 */
 	public static Pane createDefaultDnDPane(FeedbackType feedbackType, Consumer<TabPane> setup) {
 		StackPane pane = new StackPane();
-		TabPane tabPane = new DndTabPane() {
+		DndTabPane tabPane = new DndTabPane() {
 			@Override
 			protected javafx.scene.control.Skin<?> createDefaultSkin() {
 				DnDTabPaneSkin skin = new DnDTabPaneSkin(this);
