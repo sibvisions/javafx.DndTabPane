@@ -18,3 +18,27 @@ It is at the moment slated for version 9.
 # License
 
 Source code in this repository is licensed under the Eclipse Public License 1.0.
+
+
+# Usage example
+
+The DndTabPane needs to be wrapped in an additional container pane, and can
+be created via the factory:
+
+    Pane containerPane = DndTabPaneFactory.createDefaultDnDPane(FeedbackType.MARKER, null);
+	DndTabPane tabPane = (DndTabPane) containerPane.getChildren().get(0);
+
+There is also a more fine-grained method available:
+
+    // Create the necessary panes.
+    DndTabPane tabPane = new DndTabPane();
+    StackPane containerPane = new StackPane(tabPane);
+	
+	// We need to create the skin manually, could also be your custom skin.
+    DnDTabPaneSkin skin = new DnDTabPaneSkin(tabPane);
+	
+	// Setup the dragging.
+    DndTabPaneFactory.setup(FeedbackType.MARKER, containerPane, skin);
+	
+	// Set the skin.
+    tabPane.setSkin(skin);
