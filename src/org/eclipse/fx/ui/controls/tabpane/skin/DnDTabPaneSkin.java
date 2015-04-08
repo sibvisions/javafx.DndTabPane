@@ -91,12 +91,20 @@ public class DnDTabPaneSkin extends TabPaneSkin implements DragSetup {
 			headersRegion.getChildren().addListener((javafx.collections.ListChangeListener.Change<? extends Node> change) -> {
 				while (change.next()) {
 					if (change.wasRemoved()) {
-						change.getRemoved().forEach((e) -> e.removeEventHandler(MouseEvent.DRAG_DETECTED, handler));
-						change.getRemoved().forEach((e) -> e.removeEventHandler(DragEvent.DRAG_DONE, handlerFinished));
+						for (Node node : change.getRemoved()) {
+							node.removeEventHandler(MouseEvent.DRAG_DETECTED, handler);
+						}
+						for (Node node : change.getRemoved()) {
+							node.removeEventHandler(DragEvent.DRAG_DONE, handlerFinished);
+						}
 					}
 					if (change.wasAdded()) {
-						change.getAddedSubList().forEach((e) -> e.addEventHandler(MouseEvent.DRAG_DETECTED, handler));
-						change.getAddedSubList().forEach((e) -> e.addEventHandler(DragEvent.DRAG_DONE, handlerFinished));
+						for (Node node : change.getAddedSubList()) {
+							node.addEventHandler(MouseEvent.DRAG_DETECTED, handler);
+						}
+						for (Node node : change.getAddedSubList()) {
+							node.addEventHandler(DragEvent.DRAG_DONE, handlerFinished);
+						}
 					}
 				}
 			});
