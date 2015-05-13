@@ -1,0 +1,43 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	
+	<parent>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>7</version>
+	</parent>
+	
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.sibvisions.jvx</groupId>
+	<artifactId>dndtabpane</artifactId>
+	<name>DnDTabPane</name>
+	<description>A TabPane for JavaFX that supports Drag and Drop.</description>
+	<version>0.1</version>
+	<url>https://github.com/sibvisions/javafx.DndTabPane</url>
+	<packaging>jar</packaging>
+	
+	<licenses>
+		<license>
+		<name>Eclipse Public License -v 1.0</name>
+		<url>https://www.eclipse.org/legal/epl-v10.html</url>
+		</license>
+	</licenses>
+	
+	<developers>
+		<developer>
+			<name>Tom Schindl</name>
+		</developer>
+		<developer>
+			<name>Robert Zenz</name>
+		</developer>
+	</developers>
+	
+	<scm>
+		<connection>scm:git:https://github.com/sibvisions/javafx.DndTabPane.git:</connection>
+		<developerConnection>scm:git:git@github.com:sibvisions/javafx.DndTabPane.git</developerConnection>
+		<url>https://github.com/sibvisions/javafx.DndTabPane</url>
+	</scm>
+	
+</project>
+

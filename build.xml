@@ -1,4 +1,7 @@
-<project name="DnDTabPane" default="start.complete">
+<project name="DnDTabPane" default="start.complete"
+	xmlns:artifact="antlib:org.apache.maven.artifact.ant"
+	xmlns:staging="antlib:org.sonatype.nexus.ant.staging">
+	
 	<!-- 
 	***************************************************************** 
 	* information   
@@ -23,14 +26,31 @@
 	* general properties   
 	***************************************************************** 
 	-->
-	
+
 	<property name="build" value="${basedir}/build" />
 	<property name="temp" location="${build}/temp" />
 	<property name="release" location="${build}/release" />
+	<property name="install" location="${build}/install" />
 
 	<property name="src" value="${basedir}/src" />
 	<property name="classes" value="${temp}/classes" />
+	<property name="javadoc" location="${install}/doc/api" />
+	<property name="maven" location="${basedir}/maven" />
+	<property name="license" location="." />
+	<property name="buildnumber" location="${build}/buildnumber/" />
+	
+	<property name="release.name" value="dndtabpane"/>
+	<property name="build.version" value="0.1"/>
 
+	<!-- 
+		***************************************************************** 
+		* external taskdefinitions   
+		***************************************************************** 
+		-->
+	
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="${build}/ant-contrib.jar" />
+	<typedef resource="org/apache/maven/artifact/ant/antlib.xml" uri="antlib:org.apache.maven.artifact.ant" classpath="${build}/maven/maven-ant-tasks-2.1.3.jar" />
+	
 	<!-- 
 	***************************************************************** 
 	* INTERNAL TASKS   
@@ -56,15 +76,135 @@
 	<target name="jar" depends="compile">
 		<mkdir dir="${release}" />
 
-		<jar jarfile="${release}/${jar.name}" basedir="${classes}" />
+		<jar jarfile="${install}/${jar.name}" basedir="${classes}" />
 	</target>
 
+	<target name="javadoc" depends="jar">
+		<delete dir="${javadoc}" />
+		<mkdir dir="${javadoc}" />
+		
+		<javadoc
+			packagenames="*" 
+			defaultexcludes="yes" 
+			destdir="${javadoc}" 
+			author="false" 
+			version="false" 
+			use="true" 
+			windowtitle="${build.name} (ver. ${build.version})"
+			source="1.8" 
+			encoding="UTF-8">
+			
+			<sourcepath>
+				<pathelement location="${src}" />
+			</sourcepath>
+			
+			<doctitle><![CDATA[<h1>${build.name} (ver. ${build.version})</h1>]]></doctitle>
+			
+			<link href="http://docs.oracle.com/javase/8/docs/api/"/>
+		</javadoc>
+	</target>
+
+	<target name="release" depends="jar, javadoc">
+		<delete dir="${release}" />
+		<mkdir dir="${release}" />
+		
+		<copy file="${install}/${jar.name}" todir="${release}" />
+		
+		<zip destfile="${release}/${release.name}-${build.version}.zip">
+			<zipfileset dir="${release}">
+				<include name="${jar.name}" />
+			</zipfileset>
+			<zipfileset dir="${license}">
+				<include name="LICENSE" />
+				<include name="README.md" />
+			</zipfileset>
+		</zip>
+		
+		<zip destfile="${release}/${release.name}-${build.version}_javadoc.zip">
+			<zipfileset dir="${javadoc}" prefix="api" />
+			<zipfileset dir="${license}">
+				<include name="LICENSE" />
+			</zipfileset>
+		</zip>
+		
+		<zip destfile="${release}/${release.name}-${build.version}_src.zip">
+			<zipfileset dir="${src}" prefix="src" />
+			<zipfileset dir="${license}">
+				<include name="LICENSE" />
+			</zipfileset>
+		</zip>
+	</target>
+	
+	<target name="maven" depends="release">
+		<property name="maven.version.postfix" value="" />
+		<property name="mvn.groupId" value="com.sibvisions" />
+		
+		<condition property="gpgexecutable" value="C:\Program Files (x86)\GNU\GnuPG\pub\gpg.exe" else="gpg">
+			<and>
+				<os family="Windows" />
+			</and>
+		</condition>
+		
+		<!-- define late because of the classpath -->
+		<taskdef name="buildnr" classname="com.sibvisions.addons.ant.AntBuildNumber" classpath="${buildnumber}/addons.jar;${classes}" />
+		<buildnr buildfile="${buildnumber}/buildnr.properties" loadOnly="true"/>
+		
+		<propertyregex property="versionnumber" input="${build.version}" regexp=" " replace="_" global="true" defaultValue="${build.version}" />
+		
+		<property name="mvn.dndtabpane.jar" value="${release}/maven/${release.name}-${versionnumber}${maven.version.postfix}.jar" />
+		<property name="mvn.dndtabpane.sources.jar" value="${release}/maven/${release.name}-${versionnumber}${maven.version.postfix}-sources.jar" />
+		<property name="mvn.dndtabpane.javadoc.jar" value="${release}/maven/${release.name}-${versionnumber}${maven.version.postfix}-javadoc.jar" />
+		
+		<property name="mvn.id" value="${mvn.stagingrep.id}" />
+		<property name="mvn.url" value="${mvn.stagingrep.url}" />
+		
+		<mkdir dir="${release}/maven" />
+		
+		<zip destfile="${mvn.dndtabpane.jar}">
+			<zipfileset src="${release}/${jar.name}"/>
+		</zip>
+		
+		<zip destfile="${mvn.dndtabpane.sources.jar}">
+			<zipfileset dir="${src}/" includes="**" excludes="**/package.html" prefix=""/>
+		</zip>
+		<unzip src="${release}/${release.name}-${build.version}_javadoc.zip" dest="${release}/maven/javadoc"/>
+		<zip destfile="${mvn.dndtabpane.javadoc.jar}">
+			<zipfileset dir="${release}/maven/javadoc/api" />
+		</zip>
+		
+		<property name="maven.tmp" location="${temp}/maven" />
+		
+		<delete dir="${release}/maven/javadoc" />
+		<delete dir="${maven.tmp}" />
+		
+		<copy todir="${maven.tmp}">
+			<fileset dir="${maven}"/>
+		</copy>
+		
+		<replace dir="${maven.tmp}" token="&lt;version&gt;0.1&lt;/version&gt;" value="&lt;version&gt;${versionnumber}${maven.version.postfix}&lt;/version&gt;">
+			<include name="**/pom.xml" />
+		</replace>
+		
+		<artifact:mvn>
+			<arg value="org.apache.maven.plugins:maven-gpg-plugin:1.4:sign-and-deploy-file" />
+			<arg value="-Durl=${mvn.url}" />
+			<arg value="-DrepositoryId=${mvn.id}" />
+			<arg value="-Dfile=${mvn.dndtabpane.jar}" />
+			<arg value="-Dfiles=${mvn.dndtabpane.sources.jar},${mvn.dndtabpane.javadoc.jar}" />
+			<arg value="-Dclassifiers=sources,javadoc" />
+			<arg value="-Dtypes=jar,jar" />
+			<arg value="-Pgpg" />
+			<arg value="-Dgpg.executable=${gpgexecutable}" />
+		</artifact:mvn>
+	</target>
+	
 	<!-- 
 	***************************************************************** 
 	* PUBLIC START TASKS   
 	***************************************************************** 
 	-->
 
-	<target name="start.complete" depends="clean.start, jar, clean.stop" description="Creates release library" />
+	<target name="start.complete" depends="clean.start, release, clean.stop" description="Creates release library" />
+	<target name="start.maven" depends="clean.start, release, maven, clean.stop" description="Creates release library for Maven" />
 
 </project>
