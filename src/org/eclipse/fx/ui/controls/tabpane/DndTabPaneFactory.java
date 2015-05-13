@@ -163,6 +163,8 @@ public final class DndTabPaneFactory {
 	/**
 	 * Setup insert marker
 	 * 
+	 * @param type
+	 *            the feedback type.
 	 * @param layoutNode
 	 *            the layout node used to position
 	 * @param setup
