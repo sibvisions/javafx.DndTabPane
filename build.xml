@@ -1,69 +1,70 @@
 <project name="DnDTabPane" default="start.complete">
-  <!-- 
-    ***************************************************************** 
-  	* information   
-  	***************************************************************** 
-  	-->
+	<!-- 
+	***************************************************************** 
+	* information   
+	***************************************************************** 
+	-->
 
-  <description>
-    A TabPane for JavaFX that supports reordering the tabs 
-    with Drag'N'Drop.
-  </description>
+	<description>
+		A TabPane for JavaFX that supports reordering the tabs 
+		with Drag'N'Drop.
+	</description>
+
+	<!-- 
+	***************************************************************** 
+	* global properties   
+	***************************************************************** 
+	-->
+
+	<property name="jar.name" value="dndtabpane.jar" />
+
+	<!-- 
+	***************************************************************** 
+	* general properties   
+	***************************************************************** 
+	-->
 	
-  <!-- 
-  	***************************************************************** 
-  	* global properties   
-  	***************************************************************** 
-  	-->
+	<property name="build" value="${basedir}/build" />
+	<property name="temp" location="${build}/temp" />
+	<property name="release" location="${build}/release" />
 
-  <property name="jar.name" value="dndtabpane.jar" />
-    
-  <!-- 
-  	***************************************************************** 
-  	* general properties   
-  	***************************************************************** 
-  	-->
-  <property name="build" value="${basedir}/build" />
-  <property name="temp" location="${build}/temp" />
-  <property name="release" location="${build}/release" />
-  
-  <property name="src" value="${basedir}/src" />
-  <property name="classes" value="${temp}/classes" />
-	
-  <!-- 
-  	***************************************************************** 
-  	* INTERNAL TASKS   
-  	***************************************************************** 
-  	-->
-    
-  <target name="clean.start">
-    <delete dir="${temp}" />
-    <delete dir="${release}" />
-  </target>
+	<property name="src" value="${basedir}/src" />
+	<property name="classes" value="${temp}/classes" />
 
-  <target name="clean.stop">
-	<delete dir="${temp}" />
-  </target>
+	<!-- 
+	***************************************************************** 
+	* INTERNAL TASKS   
+	***************************************************************** 
+	-->
 
-  <target name="compile">
-	<mkdir dir="${build}" />
-    <mkdir dir="${classes}" />
-	
-    <javac srcdir="${src}" destdir="${classes}" includeantruntime="false" source="1.8" />
-  </target>
+	<target name="clean.start">
+		<delete dir="${temp}" />
+		<delete dir="${release}" />
+	</target>
 
-  <target name="jar" depends="compile">  
-    <mkdir dir="${release}" />
-    
-    <jar jarfile="${release}/${jar.name}" basedir="${classes}" />
-  </target>
+	<target name="clean.stop">
+		<delete dir="${temp}" />
+	</target>
 
-  <!-- 
-  	***************************************************************** 
-  	* PUBLIC START TASKS   
-  	***************************************************************** 
-  	-->
-	
-  <target name="start.complete" depends="clean.start, jar, clean.stop" description="Creates release library" />
-  
+	<target name="compile">
+		<mkdir dir="${build}" />
+		<mkdir dir="${classes}" />
+
+		<javac srcdir="${src}" destdir="${classes}" includeantruntime="false" source="1.8" />
+	</target>
+
+	<target name="jar" depends="compile">
+		<mkdir dir="${release}" />
+
+		<jar jarfile="${release}/${jar.name}" basedir="${classes}" />
+	</target>
+
+	<!-- 
+	***************************************************************** 
+	* PUBLIC START TASKS   
+	***************************************************************** 
+	-->
+
+	<target name="start.complete" depends="clean.start, jar, clean.stop" description="Creates release library" />
+
 </project>
