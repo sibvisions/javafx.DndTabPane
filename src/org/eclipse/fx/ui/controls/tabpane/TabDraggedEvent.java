@@ -17,6 +17,7 @@ import javafx.scene.control.Tab;
 /**
  * The event that occurres if a tab is dragged.
  */
+@SuppressWarnings("serial")
 public class TabDraggedEvent extends Event {
 	private int fromIndex;
 	private int toIndex;

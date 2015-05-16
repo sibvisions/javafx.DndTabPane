@@ -59,6 +59,8 @@
 	***************************************************************** 
 	-->
 	
+	<taskdef name="buildnr" classname="com.sibvisions.addons.ant.AntBuildNumber" classpath="${buildnumber}/addons.jar" />
+	
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="${build}/ant-contrib.jar" />
 	<typedef resource="org/apache/maven/artifact/ant/antlib.xml" uri="antlib:org.apache.maven.artifact.ant" classpath="${build}/maven/maven-ant-tasks-2.1.3.jar" />
 	
@@ -128,7 +130,6 @@
 		<mkdir dir="${release}" />
 
         <!-- define late because of the classpath -->
-	    <taskdef name="buildnr" classname="com.sibvisions.addons.ant.AntBuildNumber" classpath="${buildnumber}/addons.jar;${classes}" />
 	    <buildnr buildfile="${buildnumber}/buildnr.properties" version="${build.version}" name="${build.name}"/> 
 		
 		<jar jarfile="${install}/${jar.name}" basedir="${classes}">
@@ -212,7 +213,6 @@
 		</condition>
 		
 		<!-- define late because of the classpath -->
-		<taskdef name="buildnr" classname="com.sibvisions.addons.ant.AntBuildNumber" classpath="${buildnumber}/addons.jar;${classes}" />
 		<buildnr buildfile="${buildnumber}/buildnr.properties" loadOnly="true"/>
 		
 		<propertyregex property="versionnumber" input="${build.version}" regexp=" " replace="_" global="true" defaultValue="${build.version}" />
