@@ -9,7 +9,7 @@
 	</parent>
 	
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.sibvisions.jvx</groupId>
+	<groupId>com.sibvisions.external.jvxfx</groupId>
 	<artifactId>dndtabpane</artifactId>
 	<name>DnDTabPane</name>
 	<description>A TabPane for JavaFX that supports Drag and Drop.</description>

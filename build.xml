@@ -19,7 +19,12 @@
 	***************************************************************** 
 	-->
 
-	<property name="jar.name" value="dndtabpane.jar" />
+	<property name="build.name" value="DnDTabPane"/>
+	<property name="build.version" value="0.1"/>
+
+	<property name="release.name" value="dndtabpane"/>
+
+	<property name="jar.name" value="${release.name}.jar" />
 
 	<!-- 
 	***************************************************************** 
@@ -38,15 +43,21 @@
 	<property name="maven" location="${basedir}/maven" />
 	<property name="license" location="." />
 	<property name="buildnumber" location="${build}/buildnumber/" />
-	
-	<property name="release.name" value="dndtabpane"/>
-	<property name="build.version" value="0.1"/>
 
+	<!-- if already set through nightly build script, the value is not set again! -->
+	<property name="build.nightly" value="" />
+
+	<!-- Maven snapshots and staging repository id and url -->
+	<property name="mvn.snapshotsrep.id"  value="sonatype-nexus-snapshots" />
+	<property name="mvn.snapshotsrep.url" value="https://oss.sonatype.org/content/repositories/snapshots" />
+	<property name="mvn.stagingrep.id"    value="sonatype-nexus-staging" />
+    <property name="mvn.stagingrep.url"   value="https://oss.sonatype.org/service/local/staging/deploy/maven2" />
+	
 	<!-- 
-		***************************************************************** 
-		* external taskdefinitions   
-		***************************************************************** 
-		-->
+	***************************************************************** 
+	* external taskdefinitions   
+	***************************************************************** 
+	-->
 	
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="${build}/ant-contrib.jar" />
 	<typedef resource="org/apache/maven/artifact/ant/antlib.xml" uri="antlib:org.apache.maven.artifact.ant" classpath="${build}/maven/maven-ant-tasks-2.1.3.jar" />
@@ -57,6 +68,42 @@
 	***************************************************************** 
 	-->
 
+	<target name="proxy.check">
+	  <stopwatch name="timer_proxy"/>
+	    
+	  <if>
+	    <not>
+	      <isset property="ci" />
+	    </not>
+	    <then>
+		  <condition property="proxy.enabled">
+		    <and>
+		      <socket server="10.0.0.1" port="3128"/>
+	        </and>
+	      </condition>
+	    </then>
+	  </if>
+	    
+	  <stopwatch name="timer_proxy" action="total"/>
+	</target>
+	  
+	<target name="proxy" depends="proxy.check" if="proxy.enabled">
+	  <stopwatch name="timer1"/>
+	    
+	  <property name="proxy.host" value="10.0.0.1"/>
+	  <property name="proxy.port" value="3128"/>
+	  <property name="proxy.user" value=""/>
+	  <property name="proxy.pass" value=""/>
+	      
+	  <setproxy proxyhost="${proxy.host}" proxyport="${proxy.port}" proxyuser="${proxy.user}" proxypassword="${proxy.password}"/>
+	    
+	  <stopwatch name="timer1" action="total"/>
+	</target>
+	
+    <!--  
+	  * cleanup tasks 
+	  -->
+	
 	<target name="clean.start">
 		<delete dir="${temp}" />
 		<delete dir="${release}" />
@@ -66,6 +113,10 @@
 		<delete dir="${temp}" />
 	</target>
 
+    <!-- 
+	  * compile, build tasks 
+	  -->
+	
 	<target name="compile">
 		<mkdir dir="${build}" />
 		<mkdir dir="${classes}" />
@@ -76,10 +127,20 @@
 	<target name="jar" depends="compile">
 		<mkdir dir="${release}" />
 
-		<jar jarfile="${install}/${jar.name}" basedir="${classes}" />
+        <!-- define late because of the classpath -->
+	    <taskdef name="buildnr" classname="com.sibvisions.addons.ant.AntBuildNumber" classpath="${buildnumber}/addons.jar;${classes}" />
+	    <buildnr buildfile="${buildnumber}/buildnr.properties" version="${build.version}" name="${build.name}"/> 
+		
+		<jar jarfile="${install}/${jar.name}" basedir="${classes}">
+			<manifest>
+		      <attribute name="Implementation-Title" value="${build.versionstring}${build.nightly}"/>
+		      <attribute name="Implementation-Version" value="b${build.number} ${build.date}${build.nightly}"/> 
+		      <attribute name="Implementation-Vendor" value="SIB Visions GmbH"/>
+		    </manifest>
+		</jar>			
 	</target>
 
-	<target name="javadoc" depends="jar">
+	<target name="javadoc" depends="proxy, jar">
 		<delete dir="${javadoc}" />
 		<mkdir dir="${javadoc}" />
 		
@@ -93,6 +154,11 @@
 			windowtitle="${build.name} (ver. ${build.version})"
 			source="1.8" 
 			encoding="UTF-8">
+	
+		    <arg value="-J-Dhttp.proxyHost=${proxy.host}"/>
+		    <arg value="-J-Dhttp.proxyPort=${proxy.port}"/>
+		    <arg value="-J-Dhttp.proxyUser=${proxy.user}"/>
+		    <arg value="-J-Dhttp.proxyPassword=${proxy.password}"/>
 			
 			<sourcepath>
 				<pathelement location="${src}" />
@@ -189,6 +255,7 @@
 			<arg value="org.apache.maven.plugins:maven-gpg-plugin:1.4:sign-and-deploy-file" />
 			<arg value="-Durl=${mvn.url}" />
 			<arg value="-DrepositoryId=${mvn.id}" />
+			<arg value="-DpomFile=${maven.tmp}/pom.xml" />
 			<arg value="-Dfile=${mvn.dndtabpane.jar}" />
 			<arg value="-Dfiles=${mvn.dndtabpane.sources.jar},${mvn.dndtabpane.javadoc.jar}" />
 			<arg value="-Dclassifiers=sources,javadoc" />
