@@ -19,9 +19,12 @@ import javafx.scene.control.Tab;
  */
 @SuppressWarnings("serial")
 public class TabDraggedEvent extends Event {
+	/** the from index. */
 	private int fromIndex;
+	/** the to index. */
 	private int toIndex;
 	
+	/** the event type for tab dragged. */
 	public static final EventType<TabDraggedEvent> TAB_DRAGGED = new EventType<>(Event.ANY, "TAB_DRAGGED");
 	
 	/**

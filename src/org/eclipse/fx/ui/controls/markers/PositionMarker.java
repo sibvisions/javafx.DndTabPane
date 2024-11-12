@@ -146,6 +146,11 @@ public final class PositionMarker extends Group {
 		STYLEABLES = Collections.unmodifiableList(styleables);
 	}
 
+	/**
+	 * Gets the css metadata.
+	 * 
+	 * @return the css metadata
+	 */
 	public static List<CssMetaData<? extends Styleable, ?>> getClassCssMetaData() {
 		return STYLEABLES;
 	}
