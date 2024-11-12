@@ -38,6 +38,7 @@
 	<property name="install" location="${build}/install" />
 
 	<property name="src" value="${basedir}/src" />
+	<property name="libs" value="${basedir}/lib" />
 	<property name="classes" value="${temp}/classes" />
 	<property name="javadoc" location="${install}/doc/api" />
 	<property name="maven" location="${basedir}/maven" />
@@ -78,11 +79,20 @@
 	      <isset property="ci" />
 	    </not>
 	    <then>
-		  <condition property="proxy.enabled">
-		    <and>
-		      <socket server="10.0.0.1" port="3128"/>
-	        </and>
-	      </condition>
+	      <if>
+	        <not>
+	          <isset property="ci" />
+	        </not>
+	        <then> 
+	          <typedef name="canreach" classname="com.sibvisions.addons.ant.CanReach" classpath="${buildnumber}/addons.jar" />
+
+	         <condition property="proxy.enabled">
+	            <and>
+	              <canreach host="10.0.0.1" port="3128"/>
+	        	</and>
+	          </condition>
+	        </then>
+	      </if>
 	    </then>
 	  </if>
 	    
@@ -123,7 +133,13 @@
 		<mkdir dir="${build}" />
 		<mkdir dir="${classes}" />
 
-		<javac srcdir="${src}" destdir="${classes}" includeantruntime="false" source="1.8" encoding="UTF-8"/>
+		<javac srcdir="${src}" destdir="${classes}" includeantruntime="false" encoding="UTF-8">
+	      <classpath>
+	        <fileset dir="${libs}">
+	          <include name="**/*.jar" />
+	        </fileset>
+	      </classpath>
+		</javac>
 	</target>
 
 	<target name="jar" depends="compile">
@@ -145,6 +161,32 @@
 		<delete dir="${javadoc}" />
 		<mkdir dir="${javadoc}" />
 		
+	    <if>
+	      <istrue value="${proxy.enabled}" />
+	      <then> 
+	      	<property name="jd.host" value="-J-Dhttp.proxyHost=${proxy.host}"/>
+	      	<property name="jd.port" value="-J-Dhttp.proxyPort=${proxy.port}"/>
+	      	<property name="jd.user" value="-J-Dhttp.proxyUser=${proxy.user}"/>
+	        <property name="jd.pwd"  value="-J-Dhttp.proxyPassword=${proxy.password}"/>
+	      	
+	      	<property name="jds.host" value="-J-Dhttps.proxyHost=${proxy.host}"/>
+	      	<property name="jds.port" value="-J-Dhttps.proxyPort=${proxy.port}"/>
+	      	<property name="jds.user" value="-J-Dhttps.proxyUser=${proxy.user}"/>
+	        <property name="jds.pwd"  value="-J-Dhttps.proxyPassword=${proxy.password}"/>
+	      </then>
+	      <else>
+	      	<property name="jd.host" value="-J-Dnone=none"/>
+	      	<property name="jd.port" value="-J-Dnone=none"/>
+	      	<property name="jd.user" value="-J-Dnone=none"/>
+	        <property name="jd.pwd"  value="-J-Dnone=none"/>
+	      	
+	      	<property name="jds.host" value="-J-Dnone=none"/>
+	      	<property name="jds.port" value="-J-Dnone=none"/>
+	      	<property name="jds.user" value="-J-Dnone=none"/>
+	        <property name="jds.pwd"  value="-J-Dnone=none"/>
+	      </else>
+	  	</if>
+		
 		<javadoc
 			packagenames="*" 
 			defaultexcludes="yes" 
@@ -153,14 +195,23 @@
 			version="false" 
 			use="true" 
 			windowtitle="${build.name} (ver. ${build.version})"
-			source="1.8" 
 			encoding="UTF-8">
 	
-		    <arg value="-J-Dhttp.proxyHost=${proxy.host}"/>
-		    <arg value="-J-Dhttp.proxyPort=${proxy.port}"/>
-		    <arg value="-J-Dhttp.proxyUser=${proxy.user}"/>
-		    <arg value="-J-Dhttp.proxyPassword=${proxy.password}"/>
+		    <arg value="${jd.host}"/>
+		    <arg value="${jd.port}"/>
+		    <arg value="${jd.user}"/>
+		    <arg value="${jd.pwd}"/>
+		    <arg value="${jds.host}"/>
+		    <arg value="${jds.port}"/>
+		    <arg value="${jds.user}"/>
+		    <arg value="${jds.pwd}"/>
 			
+		    <classpath>
+		      <fileset dir="${libs}">
+		        <include name="**/*.jar" />
+		      </fileset>
+		    </classpath>
+
 			<sourcepath>
 				<pathelement location="${src}" />
 			</sourcepath>
